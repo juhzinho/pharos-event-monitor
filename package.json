@@ -1,0 +1,20 @@
+{
+  "name": "pharos-event-monitor",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.12"
+  },
+  "description": "Watches ERC20 Transfer events on Pharos mainnet via Chain MCP and reports each new one live",
+  "scripts": {
+    "start": "node monitor.js",
+    "test": "node test/e2e.js",
+    "test:e2e": "node test/e2e.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.1",
+    "viem": "^2.57.5"
+  }
+}
