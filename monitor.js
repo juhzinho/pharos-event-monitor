@@ -3,7 +3,7 @@ import { isAddress, parseUnits } from "viem";
 import { connect, isTransient, CHAIN_MCP_URL } from "./lib/mcp.js";
 import { explorerTx, formatAmount, formatInteger, labeled } from "./lib/format.js";
 import { resolveToken } from "./lib/tokens.js";
-import { fetchTransfers, latestBlock, MAX_WINDOW, readTokenInfo, TRANSFER_TOPIC, transferKey } from "./lib/transfers.js";
+import { fetchTransfers, latestBlock, MAX_LOOKBACK, readTokenInfo, TRANSFER_TOPIC, transferKey } from "./lib/transfers.js";
 
 const USAGE = `Usage: node monitor.js [USDC|WPROS|<token address>] [options]
 
@@ -12,7 +12,7 @@ Watches ERC20 Transfer events through Chain MCP and prints each new one as it ha
 Options:
   --min <amount>       only show transfers ≥ amount, in token units (default 0)
   --interval <s>       seconds between checks in live mode (default 5, minimum 2)
-  --lookback <blocks>  initial history, 0 to ${MAX_WINDOW} blocks (default 200)
+  --lookback <blocks>  initial history, 0 to ${MAX_LOOKBACK} blocks (default 200). get_logs is paged in 1000-block windows.
   --once               scan the history, print a summary and exit
   --links              print the explorer link of each transaction`;
 
@@ -47,7 +47,7 @@ function parseArgs(argv) {
     else opts.token = a;
   }
   if (opts.interval < 2) fail("--interval must be at least 2 seconds.");
-  if (!Number.isInteger(opts.lookback) || opts.lookback > MAX_WINDOW) fail(`--lookback must be an integer from 0 to ${MAX_WINDOW}.`);
+  if (!Number.isInteger(opts.lookback) || opts.lookback > MAX_LOOKBACK) fail(`--lookback must be an integer from 0 to ${MAX_LOOKBACK}.`);
   return opts;
 }
 
